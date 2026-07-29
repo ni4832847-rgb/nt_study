@@ -24,3 +24,4 @@ Thumbs.db
 *.tmp
 *.log
 .test_tasks.json
+tasks.json
