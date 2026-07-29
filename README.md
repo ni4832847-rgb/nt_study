@@ -21,3 +21,53 @@ todo/
   test_task_utils.py   # pytest 测试文件
   tasks.json           # 任务数据文件
   requirements.txt     # 项目依赖
+```
+
+## 安装依赖
+
+进入 todo 目录：
+
+```powershell
+cd todo
+```
+
+创建虚拟环境：
+
+```powershell
+python -m venv .venv
+```
+
+激活虚拟环境：
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+安装依赖：
+
+```powershell
+pip install -r requirements.txt
+```
+
+## 运行程序
+
+```powershell
+python todo.py
+```
+
+## 运行测试
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest
+```
+
+## 学习内容
+
+这个项目练习了：
+
+- Python 变量、列表、字典、函数、模块
+- JSON 文件读写
+- 异常处理
+- pytest 基础测试
+- Git 初始化、提交、分支、合并、冲突解决
+- GitHub 远程仓库推送
