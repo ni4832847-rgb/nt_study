@@ -1,0 +1,1593 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>预制菜销售分析与议价调研原型</title>
+  <style>
+    :root {
+      --nav: #26384c;
+      --nav-deep: #203144;
+      --primary: #2f8cff;
+      --primary-weak: #eaf4ff;
+      --green: #35b66f;
+      --green-weak: #eaf8f0;
+      --red: #f05b61;
+      --red-weak: #fff0f1;
+      --amber: #f2a12b;
+      --amber-weak: #fff7e8;
+      --ink: #273142;
+      --muted: #7c8796;
+      --line: #e6ebf2;
+      --soft-line: #f0f3f7;
+      --page: #f4f7fb;
+      --panel: #ffffff;
+      --shadow: 0 8px 24px rgba(31, 49, 74, .08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 1280px;
+      color: var(--ink);
+      background: var(--page);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 210px;
+      background: var(--nav);
+      color: #d7e2ef;
+      flex: 0 0 auto;
+    }
+
+    .brand {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      color: #f39a25;
+      font-weight: 900;
+    }
+
+    .nav-section {
+      padding: 12px 0;
+    }
+
+    .nav-item {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 20px;
+      color: #ccd8e6;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-item .ico {
+      width: 18px;
+      text-align: center;
+      color: #9fb3ca;
+    }
+
+    .nav-item.active {
+      background: var(--nav-deep);
+      border-left-color: var(--primary);
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      height: 56px;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+    }
+
+    .crumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hamburger {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: #5d6b7c;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #53606f;
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, #338cff, #28bf7b);
+      font-weight: 700;
+    }
+
+    .tabs {
+      height: 38px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      padding: 0 10px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tab {
+      height: 30px;
+      min-width: 112px;
+      border: 1px solid var(--line);
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      background: #fff;
+      color: #516071;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .page {
+      display: none;
+      padding: 14px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      color: #243041;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      border-radius: 2px;
+      background: var(--primary);
+    }
+
+    .filters {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 12px 16px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      color: #4e5c6d;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .control {
+      width: 100%;
+      height: 32px;
+      border: 1px solid #dce3ec;
+      border-radius: 4px;
+      padding: 0 10px;
+      color: #334155;
+      background: #fff;
+    }
+
+    .btn {
+      height: 32px;
+      border: 1px solid #dce3ec;
+      border-radius: 4px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #475569;
+      background: #fff;
+      white-space: nowrap;
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn.warning {
+      color: #fff;
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+
+    .btn.ghost {
+      color: var(--primary);
+      border: 0;
+      background: transparent;
+      padding: 0 6px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin: 12px 0;
+    }
+
+    .metric {
+      padding: 16px;
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric-value {
+      font-size: 26px;
+      font-weight: 800;
+      color: #1e293b;
+      line-height: 1;
+    }
+
+    .metric-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .up {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .down {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .product-section,
+    .middle-grid,
+    .bad-grid {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .product-section {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .middle-grid {
+      grid-template-columns: minmax(0, 1.1fr) minmax(420px, .9fr);
+    }
+
+    .bad-grid {
+      grid-template-columns: minmax(0, .95fr) minmax(420px, 1.05fr);
+    }
+
+    .panel-head {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-body {
+      padding: 14px 16px 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      height: 42px;
+      border-bottom: 1px solid var(--soft-line);
+      padding: 0 10px;
+      text-align: left;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+
+    th {
+      color: #455468;
+      background: #f8fafc;
+      font-weight: 700;
+    }
+
+    .rank {
+      width: 24px;
+      height: 24px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: #8ea0b6;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .rank.hot {
+      background: var(--amber);
+    }
+
+    .tag {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .tag.blue {
+      color: #2675d8;
+      background: var(--primary-weak);
+    }
+
+    .tag.green {
+      color: #22945b;
+      background: var(--green-weak);
+    }
+
+    .tag.red {
+      color: #d94148;
+      background: var(--red-weak);
+    }
+
+    .tag.amber {
+      color: #bd7414;
+      background: var(--amber-weak);
+    }
+
+    .trend-panel {
+      margin-top: 12px;
+    }
+
+    .trend-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .trend-item {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .trend-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      color: #233044;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .trend-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .line-chart,
+    .sparkline {
+      display: block;
+      width: 100%;
+    }
+
+    .line-chart {
+      height: 82px;
+    }
+
+    .sparkline {
+      height: 28px;
+    }
+
+    .chart-grid {
+      stroke: #edf2f7;
+      stroke-width: 1;
+    }
+
+    .chart-line {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .chart-line.green {
+      stroke: var(--green);
+    }
+
+    .chart-line.amber {
+      stroke: var(--amber);
+    }
+
+    .chart-line.red {
+      stroke: var(--red);
+    }
+
+    .chart-area {
+      fill: rgba(47, 140, 255, .10);
+    }
+
+    .experience-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .experience {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .experience-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .product-name {
+      font-weight: 800;
+      color: #1f2937;
+    }
+
+    .experience-text {
+      margin: 0 0 10px;
+      color: #415166;
+      line-height: 1.65;
+      font-size: 13px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .mini {
+      border-radius: 6px;
+      padding: 8px;
+      background: #f7f9fc;
+    }
+
+    .mini span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .mini strong {
+      display: block;
+      margin-top: 4px;
+      color: #243041;
+      font-size: 13px;
+    }
+
+    .reason-card {
+      display: grid;
+      gap: 10px;
+    }
+
+    .reason-row {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    .reason-row strong {
+      color: #263648;
+      font-size: 13px;
+    }
+
+    .reason-row p {
+      margin: 0;
+      color: #526174;
+      line-height: 1.55;
+      font-size: 12px;
+    }
+
+    .mock-workspace {
+      min-height: calc(100vh - 94px);
+      position: relative;
+      overflow: hidden;
+      background: #eef2f6;
+    }
+
+    .product-list {
+      margin: 14px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      filter: brightness(.74);
+    }
+
+    .drawer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 58%;
+      min-width: 760px;
+      height: 100%;
+      background: #fff;
+      box-shadow: -12px 0 28px rgba(15, 23, 42, .2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer-head {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      border-bottom: 1px solid var(--line);
+      font-weight: 700;
+      color: #243041;
+    }
+
+    .close {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      color: #667085;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow: auto;
+      padding: 18px 22px 76px;
+    }
+
+    .form-section {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .form-section.warn {
+      border-color: var(--line);
+      background: #fff;
+    }
+
+    .form-section.warn .form-head {
+      background: #fff;
+    }
+
+    .sub-block {
+      padding: 0 14px 14px;
+      background: #fff;
+    }
+
+    .sub-title {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #3f4f63;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .sub-title::before {
+      content: "";
+      width: 3px;
+      height: 14px;
+      border-radius: 2px;
+      background: var(--primary);
+    }
+
+    .compare-table th,
+    .compare-table td {
+      height: 38px;
+    }
+
+    .input-like {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      min-width: 82px;
+      max-width: 100%;
+      padding: 0 8px;
+      border: 1px solid #dce3ec;
+      border-radius: 4px;
+      color: #334155;
+      background: #fff;
+    }
+
+    .input-like.disabled {
+      color: #7f8a99;
+      background: #f5f7fa;
+    }
+
+    .gain {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .loss {
+      color: var(--red);
+      font-weight: 700;
+    }
+
+    .form-head {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      border-bottom: 1px solid var(--soft-line);
+      background: #fff;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 24px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .field-row label {
+      text-align: right;
+      color: #536174;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .required::before {
+      content: "* ";
+      color: var(--red);
+    }
+
+    .input {
+      min-width: 0;
+      width: 100%;
+      height: 32px;
+      border: 1px solid #dce3ec;
+      border-radius: 4px;
+      padding: 0 10px;
+      color: #334155;
+      background: #fff;
+    }
+
+    .input.disabled {
+      color: #8a94a4;
+      background: #f5f7fa;
+    }
+
+    textarea.input {
+      height: 74px;
+      padding: 8px 10px;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .drawer-foot {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 0 22px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1440px) {
+      body {
+        min-width: 1180px;
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .product-section,
+      .middle-grid,
+      .bad-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">农</div>
+        <div>安徽粮农</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-item"><span class="ico">⌂</span><span>首页</span></div>
+        <div class="nav-item"><span class="ico">▣</span><span>运输管理</span></div>
+        <div class="nav-item"><span class="ico">◫</span><span>后勤管理</span></div>
+        <div class="nav-item"><span class="ico">●</span><span>基础管理</span></div>
+        <div class="nav-item"><span class="ico">♟</span><span>客户服务</span></div>
+        <div class="nav-item active"><span class="ico">P</span><span>产品管理</span></div>
+        <div class="nav-item active"><span class="ico">▦</span><span>销售分析</span></div>
+        <div class="nav-item"><span class="ico">▤</span><span>产品档案</span></div>
+        <div class="nav-item"><span class="ico">✎</span><span>外采排单</span></div>
+        <div class="nav-item"><span class="ico">⚑</span><span>预警中心</span></div>
+        <div class="nav-item"><span class="ico">⚙</span><span>系统管理</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="crumb">
+          <span class="hamburger">☰</span>
+          <span>首页</span>
+          <span>/</span>
+          <span>产品管理</span>
+          <span>/</span>
+          <strong>销售经营分析</strong>
+        </div>
+        <div class="top-actions">
+          <span>搜索</span>
+          <span>消息</span>
+          <span>全屏</span>
+          <div class="avatar">钦</div>
+          <span>钦同</span>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="原型页面切换">
+        <button class="tab active" data-page="analysis">销售分析看板</button>
+        <button class="tab" data-page="bargain">修改产品-议价调研</button>
+      </nav>
+
+      <section id="analysis" class="page active">
+        <div class="panel">
+          <div class="filters">
+            <div class="field">
+              <label>统计日期</label>
+              <select class="control">
+                <option>近30天</option>
+                <option>近15天</option>
+                <option>近7天</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>搜索商品</label>
+              <input class="control" value="黑椒牛肉片 / 藤椒鸡丁" />
+            </div>
+            <div class="field">
+              <label>产品分类</label>
+              <select class="control">
+                <option>全部分类</option>
+                <option>牛肉类</option>
+                <option>鸡肉类</option>
+                <option>小炒菜</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>品牌范围</label>
+              <select class="control">
+                <option>全部品牌</option>
+                <option>合肥区域</option>
+                <option>芜湖区域</option>
+                <option>蚌埠区域</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>排名方式</label>
+              <select class="control">
+                <option>持续上涨率</option>
+                <option>一直高位销量</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>滞销阈值</label>
+              <input class="control" value="30件/7天" />
+            </div>
+            <div class="field">
+              <button class="btn primary">查询</button>
+              <button class="btn">重置</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="panel metric">
+            <div class="metric-label">分析商品数</div>
+            <div class="metric-value">64</div>
+            <div class="metric-foot"><span>覆盖 6 个品类</span><span class="up">近30天</span></div>
+          </div>
+          <div class="panel metric">
+            <div class="metric-label">最高销量商品</div>
+            <div class="metric-value">黑椒牛肉片</div>
+            <div class="metric-foot"><span>500g / 牛肉类</span><span class="up">高位销量</span></div>
+          </div>
+          <div class="panel metric">
+            <div class="metric-label">销量最高品牌</div>
+            <div class="metric-value">粮农星厨</div>
+            <div class="metric-foot"><span>黑椒牛肉片 1,682件</span><span class="up">第1</span></div>
+          </div>
+          <div class="panel metric">
+            <div class="metric-label">新品爆品</div>
+            <div class="metric-value">番茄牛腩煲</div>
+            <div class="metric-foot"><span>上市12天 689件</span><span class="up">+48.6%</span></div>
+          </div>
+          <div class="panel metric">
+            <div class="metric-label">业务员品项冠军</div>
+            <div class="metric-value">王敏</div>
+            <div class="metric-foot"><span>黑椒牛肉片 1,120件</span><span class="up">¥14.4万</span></div>
+          </div>
+        </div>
+
+        <div class="panel trend-panel">
+          <div class="panel-head">
+            <h2 class="section-title">品项销量折线趋势</h2>
+            <span class="note">区分成熟品、新品爆发和新品推广弱</span>
+          </div>
+          <div class="panel-body">
+            <div class="trend-grid">
+              <div class="trend-item">
+                <div class="trend-title">
+                  <span>黑椒牛肉片500g</span>
+                  <span class="tag green">持续上涨</span>
+                </div>
+                <svg class="line-chart" viewBox="0 0 240 82" aria-label="黑椒牛肉片500g销量趋势">
+                  <path class="chart-grid" d="M8 18H232M8 42H232M8 66H232" />
+                  <path class="chart-area" d="M10 64 L48 58 L86 47 L124 39 L162 29 L200 19 L230 14 L230 74 L10 74 Z" />
+                  <polyline class="chart-line green" points="10,64 48,58 86,47 124,39 162,29 200,19 230,14" />
+                </svg>
+                <div class="trend-meta"><span>最佳品牌：粮农星厨</span><span class="up">1,682件</span></div>
+              </div>
+              <div class="trend-item">
+                <div class="trend-title">
+                  <span>藤椒鸡丁300g</span>
+                  <span class="tag green">高位稳定</span>
+                </div>
+                <svg class="line-chart" viewBox="0 0 240 82" aria-label="藤椒鸡丁300g销量趋势">
+                  <path class="chart-grid" d="M8 18H232M8 42H232M8 66H232" />
+                  <path class="chart-area" d="M10 35 L48 31 L86 34 L124 28 L162 30 L200 25 L230 27 L230 74 L10 74 Z" />
+                  <polyline class="chart-line" points="10,35 48,31 86,34 124,28 162,30 200,25 230,27" />
+                </svg>
+                <div class="trend-meta"><span>最佳品牌：云羚优选</span><span class="up">1,336件</span></div>
+              </div>
+              <div class="trend-item">
+                <div class="trend-title">
+                  <span>鱼香肉丝料理包</span>
+                  <span class="tag amber">周末拉升</span>
+                </div>
+                <svg class="line-chart" viewBox="0 0 240 82" aria-label="鱼香肉丝料理包销量趋势">
+                  <path class="chart-grid" d="M8 18H232M8 42H232M8 66H232" />
+                  <path class="chart-area" d="M10 59 L48 55 L86 50 L124 32 L162 45 L200 27 L230 34 L230 74 L10 74 Z" />
+                  <polyline class="chart-line amber" points="10,59 48,55 86,50 124,32 162,45 200,27 230,34" />
+                </svg>
+                <div class="trend-meta"><span>最佳品牌：徽味工坊</span><span class="up">1,098件</span></div>
+              </div>
+              <div class="trend-item">
+                <div class="trend-title">
+                  <span>番茄牛腩煲350g</span>
+                  <span class="tag green">新品爆发</span>
+                </div>
+                <svg class="line-chart" viewBox="0 0 240 82" aria-label="番茄牛腩煲350g新品销量趋势">
+                  <path class="chart-grid" d="M8 18H232M8 42H232M8 66H232" />
+                  <path class="chart-area" d="M10 70 L48 66 L86 56 L124 43 L162 31 L200 20 L230 12 L230 74 L10 74 Z" />
+                  <polyline class="chart-line green" points="10,70 48,66 86,56 124,43 162,31 200,20 230,12" />
+                </svg>
+                <div class="trend-meta"><span>最佳品牌：晨希鲜厨</span><span class="up">689件</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-section">
+          <div class="panel">
+            <div class="panel-head">
+              <h2 class="section-title">热销品</h2>
+              <div>
+                <button class="btn ghost">导出</button>
+                <button class="btn primary">生成经验</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:56px;">排名</th>
+                    <th style="width:150px;">商品</th>
+                    <th style="width:92px;">品类</th>
+                    <th style="width:80px;">阶段</th>
+                    <th style="width:138px;">最佳品牌</th>
+                    <th style="width:82px;">最佳销售</th>
+                    <th style="width:78px;">近7天</th>
+                    <th style="width:78px;">近15天</th>
+                    <th style="width:78px;">近30天</th>
+                    <th style="width:110px;">近30天趋势</th>
+                    <th style="width:92px;">销售额</th>
+                    <th>表现说明</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="rank hot">1</span></td>
+                    <td>黑椒牛肉片500g</td>
+                    <td>牛肉类</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>粮农星厨</td>
+                    <td>王敏</td>
+                    <td>426</td>
+                    <td>891</td>
+                    <td>1,682</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="持续上涨趋势">
+                        <polyline class="chart-line green" points="2,24 20,22 38,17 56,14 74,9 92,6 108,4" />
+                      </svg>
+                    </td>
+                    <td>¥21.7万</td>
+                    <td>该品整体销量第一，粮农星厨卖得最好，王敏负责品项业绩最高。</td>
+                  </tr>
+                  <tr>
+                    <td><span class="rank hot">2</span></td>
+                    <td>藤椒鸡丁300g</td>
+                    <td>鸡肉类</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>云羚优选</td>
+                    <td>赵强</td>
+                    <td>318</td>
+                    <td>702</td>
+                    <td>1,336</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="高位稳定趋势">
+                        <polyline class="chart-line" points="2,12 20,10 38,12 56,8 74,10 92,7 108,8" />
+                      </svg>
+                    </td>
+                    <td>¥14.6万</td>
+                    <td>鸡肉类高位稳定，云羚优选转化最好，套餐搭配贡献明显。</td>
+                  </tr>
+                  <tr>
+                    <td><span class="rank hot">3</span></td>
+                    <td>番茄牛腩煲350g</td>
+                    <td>汤煲类</td>
+                    <td><span class="tag green">新品</span></td>
+                    <td>晨希鲜厨</td>
+                    <td>周婷</td>
+                    <td>304</td>
+                    <td>689</td>
+                    <td>689</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="新品爆发趋势">
+                        <polyline class="chart-line green" points="2,25 20,23 38,19 56,14 74,10 92,6 108,4" />
+                      </svg>
+                    </td>
+                    <td>¥8.6万</td>
+                    <td>上市12天即进入前三，晨希鲜厨试吃转化高，适合复制。</td>
+                  </tr>
+                  <tr>
+                    <td><span class="rank">4</span></td>
+                    <td>鱼香肉丝料理包</td>
+                    <td>小炒菜</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>徽味工坊</td>
+                    <td>李雪</td>
+                    <td>286</td>
+                    <td>615</td>
+                    <td>1,098</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="周末拉升趋势">
+                        <polyline class="chart-line amber" points="2,23 20,21 38,18 56,8 74,17 92,7 108,12" />
+                      </svg>
+                    </td>
+                    <td>¥12.1万</td>
+                    <td>周末家庭场景转化好，适合做家庭快手菜组合。</td>
+                  </tr>
+                  <tr>
+                    <td><span class="rank">5</span></td>
+                    <td>蒜香排骨450g</td>
+                    <td>猪肉类</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>家宴小厨</td>
+                    <td>陈磊</td>
+                    <td>241</td>
+                    <td>506</td>
+                    <td>966</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="活动拉升趋势">
+                        <polyline class="chart-line amber" points="2,22 20,20 38,18 56,18 74,11 92,6 108,9" />
+                      </svg>
+                    </td>
+                    <td>¥10.8万</td>
+                    <td>促销期拉升明显，建议保留端架和满减组合。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="middle-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <h2 class="section-title">品牌销售表现</h2>
+              <span class="note">以品牌为主，分析定位、热销品和经营动作</span>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:112px;">品牌名称</th>
+                    <th style="width:108px;">品牌定位</th>
+                    <th style="width:92px;">优势品类</th>
+                    <th style="width:118px;">代表热销品</th>
+                    <th style="width:78px;">价格带</th>
+                    <th style="width:82px;">近30天销量</th>
+                    <th style="width:86px;">增长判断</th>
+                    <th>经营建议</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>粮农星厨</td>
+                    <td>家常快手菜</td>
+                    <td>牛肉类</td>
+                    <td>黑椒牛肉片</td>
+                    <td>12-18元</td>
+                    <td>3,820</td>
+                    <td><span class="tag green">高位稳定</span></td>
+                    <td>做晚餐档主品牌，增加牛肉类和小炒类组合。</td>
+                  </tr>
+                  <tr>
+                    <td>云羚优选</td>
+                    <td>年轻轻食辣味</td>
+                    <td>鸡肉类</td>
+                    <td>藤椒鸡丁</td>
+                    <td>9-15元</td>
+                    <td>2,940</td>
+                    <td><span class="tag green">持续上涨</span></td>
+                    <td>强化午餐加购和双品套餐，适合继续扩SKU。</td>
+                  </tr>
+                  <tr>
+                    <td>晨希鲜厨</td>
+                    <td>新品试销品牌</td>
+                    <td>汤煲类</td>
+                    <td>番茄牛腩煲</td>
+                    <td>15-22元</td>
+                    <td>1,586</td>
+                    <td><span class="tag green">新品爆发</span></td>
+                    <td>作为新品首推阵地，观察7天复购后再扩铺。</td>
+                  </tr>
+                  <tr>
+                    <td>徽味工坊</td>
+                    <td>家庭囤货型</td>
+                    <td>小炒菜</td>
+                    <td>鱼香肉丝</td>
+                    <td>10-16元</td>
+                    <td>1,880</td>
+                    <td><span class="tag amber">周末拉升</span></td>
+                    <td>周五到周日加大陈列，主推家庭组合包。</td>
+                  </tr>
+                  <tr>
+                    <td>家宴小厨</td>
+                    <td>节假日聚餐</td>
+                    <td>猪肉类</td>
+                    <td>蒜香排骨</td>
+                    <td>18-28元</td>
+                    <td>1,420</td>
+                    <td><span class="tag amber">促销敏感</span></td>
+                    <td>适合节假日和满减活动，不建议日常高库存。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2 class="section-title">销售经验萃取</h2>
+              <span class="note">公司沉淀经验，不只来自个人销售</span>
+            </div>
+            <div class="panel-body">
+              <div class="experience-list">
+                <div class="experience">
+                  <div class="experience-top">
+                    <span class="product-name">黑椒牛肉片500g</span>
+                    <span class="tag green">成熟品复制</span>
+                  </div>
+                  <p class="experience-text">经验：晚餐前1小时集中陈列，主推“3分钟出锅、适合盖浇饭”，并与土豆丝、青椒肉丝做组合陈列。适用品牌：家庭快手菜品牌；最佳验证品牌：粮农星厨。</p>
+                  <div class="mini-grid">
+                    <div class="mini"><span>最佳品牌</span><strong>粮农星厨</strong></div>
+                    <div class="mini"><span>最佳销售</span><strong>王敏</strong></div>
+                    <div class="mini"><span>复制动作</span><strong>晚餐档主推</strong></div>
+                  </div>
+                </div>
+                <div class="experience">
+                  <div class="experience-top">
+                    <span class="product-name">藤椒鸡丁300g</span>
+                    <span class="tag blue">场景打法</span>
+                  </div>
+                  <p class="experience-text">经验：用“下饭微辣、不油腻”做主卖点，优先推荐给年轻家庭和快手午餐用户；陈列在鸡肉类第一排，并与米饭、面食类动线靠近，提高连带销售。</p>
+                  <div class="mini-grid">
+                    <div class="mini"><span>最佳品牌</span><strong>云羚优选</strong></div>
+                    <div class="mini"><span>核心场景</span><strong>午餐加购</strong></div>
+                    <div class="mini"><span>复用条件</span><strong>鸡肉类高动销</strong></div>
+                  </div>
+                </div>
+                <div class="experience">
+                  <div class="experience-top">
+                    <span class="product-name">番茄牛腩煲350g</span>
+                    <span class="tag green">新品首推</span>
+                  </div>
+                  <p class="experience-text">经验：新品先小范围投放到新品试销型和白领加班型品牌，首推期看试吃转化和7天复购；若连续两周高于新品阈值，再扩大到同类品牌，不建议一开始全量铺货。</p>
+                  <div class="mini-grid">
+                    <div class="mini"><span>最佳品牌</span><strong>晨希鲜厨</strong></div>
+                    <div class="mini"><span>判断指标</span><strong>试吃转化</strong></div>
+                    <div class="mini"><span>下一步</span><strong>复制铺货</strong></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bad-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <h2 class="section-title">滞销产品预警</h2>
+              <span class="note">触发规则：成熟品下滑 / 新品推广弱 / 低于阈值</span>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:150px;">品名</th>
+                    <th style="width:78px;">阶段</th>
+                    <th style="width:86px;">近7天</th>
+                    <th style="width:86px;">近15天</th>
+                    <th style="width:86px;">近30天</th>
+                    <th style="width:100px;">销量趋势</th>
+                    <th style="width:86px;">阈值</th>
+                    <th style="width:90px;">状态</th>
+                    <th>建议动作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>酸菜鱼片350g</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>18</td>
+                    <td>51</td>
+                    <td>146</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="酸菜鱼片销量下降趋势">
+                        <polyline class="chart-line red" points="2,5 20,8 38,10 56,15 74,18 92,22 108,24" />
+                      </svg>
+                    </td>
+                    <td>30</td>
+                    <td><span class="tag red">低于阈值</span></td>
+                    <td>调低安全库存，安排口味复盘</td>
+                  </tr>
+                  <tr>
+                    <td>香辣掌中宝</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>22</td>
+                    <td>64</td>
+                    <td>190</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="香辣掌中宝销量下降趋势">
+                        <polyline class="chart-line red" points="2,4 20,7 38,11 56,13 74,18 92,21 108,23" />
+                      </svg>
+                    </td>
+                    <td>30</td>
+                    <td><span class="tag red">连续下降</span></td>
+                    <td>改为组合包，降低单品陈列位</td>
+                  </tr>
+                  <tr>
+                    <td>芝士焗饭料包</td>
+                    <td><span class="tag blue">成熟品</span></td>
+                    <td>12</td>
+                    <td>39</td>
+                    <td>132</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="芝士焗饭料包销量下降趋势">
+                        <polyline class="chart-line red" points="2,7 20,8 38,12 56,16 74,17 92,22 108,25" />
+                      </svg>
+                    </td>
+                    <td>30</td>
+                    <td><span class="tag red">双规则</span></td>
+                    <td>议价或暂停补货，观察7天</td>
+                  </tr>
+                  <tr>
+                    <td>照烧鸡排饭料包</td>
+                    <td><span class="tag green">新品</span></td>
+                    <td>9</td>
+                    <td>18</td>
+                    <td>18</td>
+                    <td>
+                      <svg class="sparkline" viewBox="0 0 110 28" aria-label="照烧鸡排饭料包新品推广弱趋势">
+                        <polyline class="chart-line red" points="2,22 20,21 38,23 56,21 74,24 92,23 108,25" />
+                      </svg>
+                    </td>
+                    <td>30</td>
+                    <td><span class="tag red">新品推广弱</span></td>
+                    <td>复盘试吃点位和首单活动，缩小铺货范围</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2 class="section-title">滞销原因分析</h2>
+              <button class="btn primary">生成处理单</button>
+            </div>
+            <div class="panel-body">
+              <div class="reason-card">
+                <div class="reason-row">
+                  <strong>酸菜鱼片350g</strong>
+                  <p>近30天到近7天销量从146件降到18件，评价中“鱼片偏碎”“汤底偏咸”占比高；同类竞品售价低2.3元，建议先做口味验证和议价。</p>
+                </div>
+                <div class="reason-row">
+                  <strong>香辣掌中宝</strong>
+                  <p>试吃转化低，主要集中在非辣口偏好店面；库存周转慢，建议转移到夜宵消费强的门店，并绑定夜宵场景促销。</p>
+                </div>
+                <div class="reason-row">
+                  <strong>芝士焗饭料包</strong>
+                  <p>客群窄、复购低，近7天低于30件阈值且连续三期下降；建议下调订货量，若议后毛利不足15%则清退。</p>
+                </div>
+                <div class="reason-row">
+                  <strong>照烧鸡排饭料包</strong>
+                  <p>该品是新品，不能按成熟品衰退判断；上市15天仅18件，说明首推试吃、陈列位置和销售话术没有打出效果。建议先暂停扩大铺货，只保留2-3家目标门店重做试吃和价格带验证。</p>
+                </div>
+                <div class="reason-row">
+                  <strong>系统判定口径</strong>
+                  <p>成熟品优先看近7/15/30天趋势，若三段销量持续下滑则标记连续下降；新品单独看上市天数、首推期销量和推广转化，若上市7-15天仍低于新品阈值，则标记为新品推广弱。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="bargain" class="page">
+        <div class="mock-workspace">
+          <div class="product-list">
+            <div class="panel-head">
+              <h2 class="section-title">产品列表</h2>
+              <div>
+                <button class="btn primary">新增</button>
+                <button class="btn warning">导出</button>
+              </div>
+            </div>
+            <div class="panel-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:58px;">序号</th>
+                    <th>产品名称</th>
+                    <th>吉客云分类</th>
+                    <th>规格名称</th>
+                    <th>货品编号</th>
+                    <th>换算率</th>
+                    <th>生产工厂</th>
+                    <th>生产类型</th>
+                    <th>上架状态</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>云羚-牛肉风味小炒肉</td><td>代工</td><td>180g</td><td>DGLN162</td><td>60</td><td>安徽晨希食品</td><td><span class="tag amber">外采</span></td><td><span class="tag blue">正常</span></td><td>修改 配置工厂 停产下架</td></tr>
+                  <tr><td>2</td><td>精品梅菜扣肉2号</td><td>菜报酱</td><td>200g</td><td>CBZ024Y</td><td>60</td><td>安徽晨希食品</td><td><span class="tag red">请指定工厂</span></td><td><span class="tag blue">正常</span></td><td>修改 配置工厂 停产下架</td></tr>
+                  <tr><td>3</td><td>手工猪肉小笼包8个装</td><td>外采食品</td><td>30g*8个/袋</td><td>WCLN326Y</td><td>30</td><td>粮农产业园</td><td><span class="tag blue">自研</span></td><td><span class="tag blue">正常</span></td><td>修改 配置工厂 停产下架</td></tr>
+                  <tr><td>4</td><td>沙茶牛肉片</td><td>粮农星厨</td><td>500g</td><td>SCLN33Y</td><td>8</td><td>粮农产业园</td><td><span class="tag blue">自研</span></td><td><span class="tag blue">正常</span></td><td>修改 配置工厂 停产下架</td></tr>
+                  <tr><td>5</td><td>酸菜鱼片350g</td><td>外采食品</td><td>350g</td><td>WCLN330Y</td><td>16</td><td>山东嘉顺食品</td><td><span class="tag amber">外采</span></td><td><span class="tag blue">正常</span></td><td>修改 配置工厂 停产下架</td></tr>
+                  <tr><td>6</td><td>芝士焗饭料包</td><td>外采食品</td><td>220g</td><td>WCLN318Y</td><td>30</td><td>安徽晨希食品</td><td><span class="tag amber">外采</span></td><td><span class="tag blue">正常</span></td><td>修改 配置工厂 停产下架</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <aside class="drawer">
+            <div class="drawer-head">
+              <span>修改产品</span>
+              <button class="close" aria-label="关闭">×</button>
+            </div>
+            <div class="drawer-body">
+              <section class="form-section">
+                <div class="form-head"><h2 class="section-title">基础信息</h2></div>
+                <div class="form-grid">
+                  <div class="field-row"><label class="required">货品名称</label><input class="input" value="云羚-牛肉风味小炒肉"></div>
+                  <div class="field-row"><label class="required">货品编号</label><input class="input disabled" value="DGLN162"></div>
+                  <div class="field-row"><label class="required">吉客云分类</label><select class="input"><option>代工</option></select></div>
+                  <div class="field-row"><label class="required">产品分类</label><select class="input"><option>牛肉类</option></select></div>
+                  <div class="field-row"><label class="required">净含量</label><input class="input" value="180g"></div>
+                  <div class="field-row"><label class="required">品质等级</label><select class="input"><option>B</option><option>C</option></select></div>
+                  <div class="field-row"><label class="required">售卖状态</label><select class="input"><option>正常售卖</option></select></div>
+                  <div class="field-row"><label class="required">生命周期</label><select class="input"><option>新品</option></select></div>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-head"><h2 class="section-title">成本维护</h2><span class="note">原系统字段保留</span></div>
+                <div class="form-grid">
+                  <div class="field-row"><label>销售成本</label><input class="input" value="8.60"></div>
+                  <div class="field-row"><label>配送成本</label><input class="input" value="0.80"></div>
+                  <div class="field-row"><label>出厂价</label><input class="input" value="9.20"></div>
+                  <div class="field-row"><label>物流成本</label><input class="input" value="0.45"></div>
+                  <div class="field-row"><label>到岸价</label><input class="input" value="10.45"></div>
+                  <div class="field-row"><label>售价</label><input class="input" value="13.90"></div>
+                  <div class="field-row full"><label>毛利率</label><input class="input" value="24.8%"></div>
+                </div>
+              </section>
+
+              <section class="form-section warn">
+                <div class="form-head">
+                  <h2 class="section-title">议价调研</h2>
+                  <span class="tag blue">采购补充信息</span>
+                </div>
+                <div class="form-grid">
+                  <div class="field-row"><label class="required">调研品类</label><select class="input"><option>牛肉类 / 小炒肉</option></select></div>
+                  <div class="field-row"><label class="required">供应商</label><input class="input" value="安徽晨希食品有限公司"></div>
+                  <div class="field-row"><label>议价负责人</label><input class="input" value="张慧"></div>
+                  <div class="field-row"><label>商家联系人</label><input class="input" value="刘经理 138****2198"></div>
+                  <div class="field-row"><label>调研来源</label><select class="input"><option>竞品价格偏低 / 门店反馈</option></select></div>
+                  <div class="field-row"><label>议价状态</label><select class="input"><option>待采购确认</option><option>沟通中</option><option>商家已同意</option><option>已生效</option></select></div>
+                  <div class="field-row"><label>生效日期</label><input class="input" value="2026-08-01"></div>
+                  <div class="field-row"><label>审批状态</label><select class="input"><option>待提交</option><option>审批中</option><option>已通过</option></select></div>
+                </div>
+
+                <div class="sub-block">
+                  <div class="sub-title">价格对比明细</div>
+                  <table class="compare-table">
+                    <thead>
+                      <tr>
+                        <th style="width:120px;">价格项</th>
+                        <th style="width:110px;">原价格</th>
+                        <th style="width:110px;">议后价格</th>
+                        <th style="width:110px;">竞品参考</th>
+                        <th style="width:100px;">变化</th>
+                        <th>说明</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>供货价</td>
+                        <td><span class="input-like disabled">9.20 元</span></td>
+                        <td><span class="input-like">8.35 元</span></td>
+                        <td><span class="input-like disabled">8.50 元</span></td>
+                        <td><span class="gain">-0.85 元</span></td>
+                        <td>按月采购量800箱承诺，供应商可接受该报价。</td>
+                      </tr>
+                      <tr>
+                        <td>建议售价</td>
+                        <td><span class="input-like disabled">13.90 元</span></td>
+                        <td><span class="input-like">12.90 元</span></td>
+                        <td><span class="input-like disabled">12.80 元</span></td>
+                        <td><span class="gain">-1.00 元</span></td>
+                        <td>议后售价接近竞品，有利于恢复门店动销。</td>
+                      </tr>
+                      <tr>
+                        <td>预计毛利率</td>
+                        <td><span class="input-like disabled">24.8%</span></td>
+                        <td><span class="input-like">27.5%</span></td>
+                        <td><span class="input-like disabled">25.6%</span></td>
+                        <td><span class="gain">+2.7%</span></td>
+                        <td>供货价降幅高于售价降幅，毛利率提升。</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="sub-block">
+                  <div class="sub-title">商家沟通记录</div>
+                  <table class="compare-table">
+                    <thead>
+                      <tr>
+                        <th style="width:135px;">沟通时间</th>
+                        <th style="width:90px;">沟通方式</th>
+                        <th style="width:110px;">沟通对象</th>
+                        <th>沟通内容</th>
+                        <th style="width:92px;">附件</th>
+                        <th style="width:92px;">记录人</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>2026-07-24 10:20</td>
+                        <td>电话</td>
+                        <td>刘经理</td>
+                        <td>反馈同类牛肉小炒品价格压力，提出供货价降至8.30-8.40元区间。</td>
+                        <td><span class="tag blue">录音</span></td>
+                        <td>张慧</td>
+                      </tr>
+                      <tr>
+                        <td>2026-07-25 16:40</td>
+                        <td>微信</td>
+                        <td>刘经理</td>
+                        <td>商家确认月采购800箱时供货价可按8.35元执行，账期维持原条件。</td>
+                        <td><span class="tag green">截图</span></td>
+                        <td>张慧</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="form-grid">
+                  <div class="field-row full"><label>议价结论</label><textarea class="input">建议提交采购审批。议后供货价8.35元，建议门店售价12.90元，预计毛利率27.5%。生效后观察近7天销量是否恢复到80件以上。</textarea></div>
+                  <div class="field-row full"><label>审批备注</label><input class="input" value="待采购负责人确认后同步更新成本维护中的出厂价、到岸价和售价。"></div>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-head"><h2 class="section-title">工厂与负责人</h2></div>
+                <div class="form-grid">
+                  <div class="field-row full"><label>生产工厂</label><input class="input disabled" value="安徽晨希食品有限公司"></div>
+                  <div class="field-row full"><label class="required">产品负责人</label><input class="input" value="请输入名称搜索负责人"></div>
+                </div>
+              </section>
+
+              <section class="form-section">
+                <div class="form-head"><h2 class="section-title">图文内容</h2></div>
+                <div class="form-grid">
+                  <div class="field-row full"><label class="required">产品介绍</label><textarea class="input">牛肉风味小炒肉，适合快手下饭菜场景。</textarea></div>
+                  <div class="field-row full"><label>使用场景</label><textarea class="input">社区门店晚餐档、年轻家庭快手菜、店员试吃转化。</textarea></div>
+                </div>
+              </section>
+            </div>
+            <div class="drawer-foot">
+              <button class="btn">取消</button>
+              <button class="btn">保存草稿</button>
+              <button class="btn primary">提交议价方案</button>
+              <button class="btn primary">确定</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll(".tab");
+    const pages = document.querySelectorAll(".page");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.page;
+        tabs.forEach((item) => item.classList.toggle("active", item === tab));
+        pages.forEach((page) => page.classList.toggle("active", page.id === target));
+      });
+    });
+  </script>
+</body>
+</html>

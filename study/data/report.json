@@ -1,0 +1,62 @@
+{
+  "generated_at": "2026-07-17T20:49:13+08:00",
+  "api": {
+    "base_url": "https://api.xianda.com/v1",
+    "timeout": 5.0
+  },
+  "products": [
+    {
+      "id": "P001",
+      "name": "有机蔬菜",
+      "price": 6.9,
+      "actual_cost": 7.25,
+      "stock": 80
+    },
+    {
+      "id": "P002",
+      "name": "挪威三文鱼",
+      "price": 59.9,
+      "actual_cost": 62.9,
+      "stock": 120
+    },
+    {
+      "id": "P003",
+      "name": "鲜牛奶",
+      "price": 12.8,
+      "actual_cost": 13.44,
+      "stock": 45
+    }
+  ],
+  "warehouse_inventory": [
+    {
+      "warehouse": "浦东仓",
+      "request_url": "https://api.xianda.com/v1/warehouses/浦东仓/inventory",
+      "elapsed_seconds": 1.46,
+      "stocks": {
+        "P001": 80,
+        "P002": 120,
+        "P003": 45
+      }
+    },
+    {
+      "warehouse": "徐汇仓",
+      "request_url": "https://api.xianda.com/v1/warehouses/徐汇仓/inventory",
+      "elapsed_seconds": 1.5,
+      "stocks": {
+        "P001": 80,
+        "P002": 120,
+        "P003": 45
+      }
+    },
+    {
+      "warehouse": "闵行仓",
+      "request_url": "https://api.xianda.com/v1/warehouses/闵行仓/inventory",
+      "elapsed_seconds": 1.21,
+      "stocks": {
+        "P001": 80,
+        "P002": 120,
+        "P003": 45
+      }
+    }
+  ]
+}

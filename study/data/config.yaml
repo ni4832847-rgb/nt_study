@@ -1,0 +1,14 @@
+api:
+  base_url: https://api.xianda.com/v1
+  timeout: 5
+
+delivery:
+  delivery_fee: 6.0
+  free_delivery_threshold: 59.0
+
+promotion:
+  tiered_discount:
+    - threshold: 99
+      reduce: 10
+    - threshold: 199
+      reduce: 30

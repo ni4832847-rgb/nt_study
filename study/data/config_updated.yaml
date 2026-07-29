@@ -1,0 +1,11 @@
+delivery:
+  delivery_fee: 6.0
+  free_delivery_threshold: 49.0
+promotion:
+  tiered_discount:
+  - threshold: 99
+    reduce: 10
+  - threshold: 199
+    reduce: 30
+  - threshold: 299
+    reduce: 50

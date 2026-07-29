@@ -1,0 +1,18 @@
+[
+  {
+    "book_id": "1",
+    "title": "不知道",
+    "author": "你好",
+    "category": "童话书",
+    "total_stock": 9,
+    "available_stock": 8
+  },
+  {
+    "book_id": "2",
+    "title": "小王子",
+    "author": "倪同",
+    "category": "童话书",
+    "total_stock": 10,
+    "available_stock": 10
+  }
+]

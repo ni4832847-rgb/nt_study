@@ -1,0 +1,10 @@
+[
+  {
+    "book_id": "1",
+    "title": "毛选",
+    "author": "毛泽东",
+    "category": "哲学",
+    "total_stock": 9,
+    "available_stock": 9
+  }
+]

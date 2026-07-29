@@ -1,0 +1,29 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test and coverage cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Temporary and log files
+*.tmp
+*.log
+
+# Tool caches and Windows system junctions
+.bun/
+AppData/
+Application Data/
