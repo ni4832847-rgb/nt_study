@@ -77,3 +77,5 @@ python todo.py
 这是通过github网页添加的内容。
 
 这是本地克隆仓库中添加的内容。
+
+本项目会持续补充更多 python 和 git 练习
