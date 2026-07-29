@@ -71,3 +71,7 @@ python todo.py
 - pytest 基础测试
 - Git 初始化、提交、分支、合并、冲突解决
 - GitHub 远程仓库推送
+
+
+## 备注
+这是通过github网页添加的内容。
