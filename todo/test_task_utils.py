@@ -25,6 +25,18 @@ def test_add_task_to_empty_list():
     assert result[0]["deadline"] == "2026-07-23"
     assert result[0]['name'] == "学习python"
     assert result[0]['status'] == "未完成"
+    assert result[0]['priority'] == "普通"
+
+def test_add_task_with_priority():
+    tasks = []
+
+    result = add_task(tasks, "学习python", "2026-07-23", "未完成", priority="高")
+
+    assert len(result) == 1
+    assert result[0]["deadline"] == "2026-07-23"
+    assert result[0]['name'] == "学习python"
+    assert result[0]['status'] == "未完成"
+    assert result[0]['priority'] == "高"
 
 
 def test_add_task_to_existing_list():

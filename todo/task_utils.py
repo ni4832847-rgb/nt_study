@@ -17,11 +17,12 @@ def count_tasks(tasks):
     return len(tasks)
 
 
-def add_task(tasks, name, deadline, status):
+def add_task(tasks, name, deadline, status, priority="普通"):
     task = {
         "name": name,
         "deadline": deadline,
-        "status": status
+        "status": status,
+        "priority": priority
     }
     tasks.append(task)
     return tasks
