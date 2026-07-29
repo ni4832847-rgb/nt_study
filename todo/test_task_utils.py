@@ -1,4 +1,5 @@
-import os
+﻿import os
+import tempfile
 
 from task_utils import count_tasks, add_task, delete_task, save_tasks, load_tasks, mark_done
 
@@ -100,7 +101,9 @@ def test_save_and_load_tasks():
         {"name": "学习 Python", "deadline": "2026-07-27", "status": "未完成"}
     ]
 
-    filename = ".test_tasks.json"
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".json")
+    filename = temp_file.name
+    temp_file.close()
 
     try:
         save_tasks(tasks, filename)
@@ -131,3 +134,4 @@ def test_mark_done_invalid_index():
 
     assert result is False
     assert tasks[0]['status'] == '未完成'
+
