@@ -10,6 +10,7 @@ __pycache__/
 
 # Test and coverage cache
 .pytest_cache/
+.pytest_tmp/
 .coverage
 htmlcov/
 
@@ -22,6 +23,7 @@ Thumbs.db
 # Temporary and log files
 *.tmp
 *.log
+.test_tasks.json
 
 # Tool caches and Windows system junctions
 .bun/

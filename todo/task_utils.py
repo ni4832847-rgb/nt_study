@@ -5,7 +5,7 @@ def show_tasks(tasks):
     if len(tasks) == 0:
         print("暂无任务")
     else:
-        print("任务列表：")
+        print("当前任务列表：")
         for index, task in enumerate(tasks, start=1):
             print(f"{index}. {task['name']} | "
                   f"截止时间：{task['deadline']} | "

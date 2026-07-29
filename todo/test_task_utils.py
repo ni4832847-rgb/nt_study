@@ -1,3 +1,5 @@
+import os
+
 from task_utils import count_tasks, add_task, delete_task, save_tasks, load_tasks, mark_done
 
 
@@ -81,17 +83,21 @@ def test_delete_invalid_task_index_zero():
     assert len(tasks) == 1
 
 
-def test_save_and_load_tasks(tmp_path):
+def test_save_and_load_tasks():
     tasks = [
         {"name": "学习 Python", "deadline": "2026-07-27", "status": "未完成"}
     ]
 
-    filename = tmp_path / "tasks.json"
+    filename = ".test_tasks.json"
 
-    save_tasks(tasks, filename)
-    result = load_tasks(filename)
+    try:
+        save_tasks(tasks, filename)
+        result = load_tasks(filename)
 
-    assert result == tasks
+        assert result == tasks
+    finally:
+        if os.path.exists(filename):
+            os.remove(filename)
 
 
 def test_mark_done_success():

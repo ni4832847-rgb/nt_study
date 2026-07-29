@@ -10,6 +10,7 @@ __pycache__/
 
 # Test and coverage cache
 .pytest_cache/
+.pytest_tmp/
 .coverage
 htmlcov/
 
@@ -22,3 +23,4 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.log
+.test_tasks.json
