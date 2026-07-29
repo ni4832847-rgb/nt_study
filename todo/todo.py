@@ -7,7 +7,7 @@ def main():
     tasks = load_tasks(FILENAME)
 
     while True:
-        print("\npyrhon 任务系统")
+        print("\nPython 任务管理器")
         print("1. 查看任务")
         print("2. 新增任务")
         print("3. 删除任务")
