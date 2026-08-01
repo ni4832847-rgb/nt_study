@@ -1,7 +1,7 @@
 ﻿import os
 import tempfile
 
-from task_utils import count_tasks, add_task, delete_task, save_tasks, load_tasks, mark_done
+from task_utils import count_tasks, add_task, delete_task, save_tasks, load_tasks, mark_done, search_tasks
 
 
 def test_count_tasks_empty():
@@ -135,3 +135,13 @@ def test_mark_done_invalid_index():
     assert result is False
     assert tasks[0]['status'] == '未完成'
 
+def test_search_tasks_by_name():
+    tasks = [
+        {"name": "学习 python", "deadline": "2026-08-02", "status": "未完成"},
+        {"name": "练习 Git", "deadline": "2026-08-03", "status": "未完成"},
+    ]
+
+    result = search_tasks(tasks, "python")
+
+    assert len(result) == 1
+    assert result[0]["name"] == "学习 python"

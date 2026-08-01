@@ -17,6 +17,17 @@ def count_tasks(tasks):
     return len(tasks)
 
 
+def search_tasks(tasks, keyword):
+    result = []
+
+    for task in tasks:
+        if keyword in task['name']:
+            result.append(task)
+
+    return result
+
+
+
 def add_task(tasks, name, deadline, status, priority="普通"):
     task = {
         "name": name,
