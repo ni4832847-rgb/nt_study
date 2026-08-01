@@ -1,4 +1,4 @@
-from task_utils import show_tasks, add_task, delete_task, save_tasks, load_tasks, mark_done
+from task_utils import show_tasks, add_task, delete_task, save_tasks, load_tasks, mark_done, search_tasks
 
 FILENAME = "tasks.json"
 
@@ -12,7 +12,8 @@ def main():
         print("2. 新增任务")
         print("3. 删除任务")
         print("4. 标记完成")
-        print("5. 保存并退出")
+        print("5. 搜索任务")
+        print("6. 保存并退出")
 
         choice = input("请选择操作：")
 
@@ -59,7 +60,14 @@ def main():
             else:
                 print("序号无效，操作失败")
 
+
         elif choice == "5":
+            keyword = input("请输入关键字:")
+            result = search_tasks(tasks, keyword)
+            show_tasks(result)
+
+
+        elif choice == "6":
             save_tasks(tasks, FILENAME)
             print("任务已保存，再见")
             break
