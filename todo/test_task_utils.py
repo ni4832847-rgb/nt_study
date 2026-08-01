@@ -145,3 +145,15 @@ def test_search_tasks_by_name():
 
     assert len(result) == 1
     assert result[0]["name"] == "学习 python"
+
+
+def test_search_tasks_ignore_case():
+    tasks = [
+        {"name": "学习 Python", "deadline": "2026-08-02", "status": "未完成"},
+        {"name": "练习 Git", "deadline": "2026-08-03", "status": "未完成"},
+    ]
+
+    result = search_tasks(tasks, "python")
+
+    assert len(result) == 1
+    assert result[0]["name"] == "学习 Python"

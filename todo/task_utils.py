@@ -19,9 +19,11 @@ def count_tasks(tasks):
 
 def search_tasks(tasks, keyword):
     result = []
+    keyword_lower = keyword.lower()
 
     for task in tasks:
-        if keyword in task['name']:
+        task_name_lower = task["name"].lower()
+        if keyword_lower in task_name_lower:
             result.append(task)
 
     return result
