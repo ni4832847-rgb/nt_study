@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class TaskCreate(BaseModel):
     name: str
-    status: str
+    status: str = "未完成"
 
 
 app = FastAPI()
