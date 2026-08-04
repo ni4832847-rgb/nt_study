@@ -1,9 +1,9 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class TaskCreate(BaseModel):
-    name: str
+    name: str = Field(min_length=1)
     status: str = "未完成"
 
 

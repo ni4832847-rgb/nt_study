@@ -65,6 +65,16 @@ def test_create_task_with_default_status():
     assert response.json() == {"id": 3, "name": "默认状态任务", "status": "未完成"}
 
 
+def test_create_task_with_empty_name():
+    response = client.post(
+        "/tasks",
+        json={"name": "", "status": "未完成"},
+    )
+
+    assert response.status_code == 422
+
+
+
 def test_update_task():
     response = client.put(
         "/tasks/1",
