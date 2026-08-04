@@ -94,6 +94,15 @@ def test_update_task_with_empty_name():
     assert response.status_code == 422
 
 
+def test_update_task_with_blank_name():
+    response = client.put(
+        "/tasks/1",
+        json={"name": "   ", "status": "已完成"},
+    )
+
+    assert response.status_code == 422
+
+
 def test_update_missing_task():
     response = client.put(
         "/tasks/999",
@@ -122,7 +131,13 @@ def test_delete_missing_task():
     assert response.json() == {"detail": "Task not found"}
 
 
+def test_create_task_with_blank_name():
+    response = client.post(
+        "/tasks",
+        json={"name": "   ", "status": "未完成"},
+    )
 
+    assert response.status_code == 422
 
 
 
