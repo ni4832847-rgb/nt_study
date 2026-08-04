@@ -8,7 +8,7 @@ class TaskCreate(BaseModel):
 
 
 class TaskUpdate(BaseModel):
-    name: str
+    name: str = Field(min_length=1)
     status: str
 
 

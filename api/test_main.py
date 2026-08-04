@@ -85,6 +85,15 @@ def test_update_task():
     assert response.json() == {"id": 1, "name": "学习 FastAPI", "status": "已完成"}
 
 
+def test_update_task_with_empty_name():
+    response = client.put(
+        "/tasks/1",
+        json={"name": "", "status": "已完成"},
+    )
+
+    assert response.status_code == 422
+
+
 def test_update_missing_task():
     response = client.put(
         "/tasks/999",
