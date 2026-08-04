@@ -51,7 +51,7 @@ def test_get_missing_task():
 def test_create_task():
     response = client.post("/tasks", json={"name": "测试创建任务", "status": "未完成"},)
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json() == {"id": 3, "name": "测试创建任务","status": "未完成"}
 
 
@@ -61,7 +61,7 @@ def test_create_task_with_default_status():
         json={"name": "默认状态任务"}
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert response.json() == {"id": 3, "name": "默认状态任务", "status": "未完成"}
 
 

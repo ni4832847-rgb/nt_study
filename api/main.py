@@ -58,7 +58,7 @@ def delete_task(task_id: int):
     raise HTTPException(status_code=404, detail="Task not found")
 
 
-@app.post("/tasks")
+@app.post("/tasks", status_code=201)
 def create_task(task: TaskCreate):
     new_task = {
         "id": len(tasks) + 1,
