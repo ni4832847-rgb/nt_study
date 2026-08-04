@@ -1,9 +1,20 @@
+import pytest
 from fastapi.testclient import TestClient
 
-from api.main import app
+from api.main import app, tasks
 
 
 client = TestClient(app)
+
+@pytest.fixture(autouse=True)
+def reset_tasks():
+    tasks.clear()
+    tasks.extend(
+        [
+            {"id": 1, "name": "学习 FastAPI", "status": "未完成"},
+            {"id": 2, "name": "练习 pytest", "status": "未完成"},
+        ]
+    )
 
 
 def test_health_check():
@@ -51,4 +62,4 @@ def test_create_task_with_default_status():
     )
 
     assert response.status_code == 200
-    assert response.json() == {"id": 4, "name": "默认状态任务", "status": "未完成"}
+    assert response.json() == {"id": 3, "name": "默认状态任务", "status": "未完成"}
