@@ -80,3 +80,19 @@ python todo.py
 这是本地克隆仓库中添加的内容。
 
 本项目会持续补充更多 python 和 git 练习
+
+
+## FastAPI API
+
+当前项目已经实现了一个基于内存数据的任务 API。
+
+已实现接口：
+
+- `GET /health`：健康检查
+- `GET /tasks`：查看任务列表
+- `POST /tasks`：创建任务
+- `GET /tasks/{task_id}`：查看单个任务
+- `PUT /tasks/{task_id}`：更新任务
+- `DELETE /tasks/{task_id}`：删除任务
+
+目前任务数据保存在程序内存中，服务重启后通过 API 新增、更新、删除的数据会重置。
