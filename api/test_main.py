@@ -1,7 +1,8 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from api.main import app, tasks
+from api.main import app
+from api.storage import tasks
 
 
 client = TestClient(app)

@@ -1,14 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from api.models import Task, TaskCreate, TaskUpdate
-
-
+from api.storage import tasks
 app = FastAPI()
-
-
-tasks = [
-    {"id": 1, "name": "学习 FastAPI", "status": "未完成"},
-    {"id": 2, "name": "练习 pytest", "status": "未完成"},
-]
 
 
 @app.get("/health")
