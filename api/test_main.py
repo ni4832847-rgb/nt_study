@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
-from api.storage import tasks
+from api.storage import save_tasks, tasks
 
 
 client = TestClient(app)
@@ -16,7 +16,7 @@ def reset_tasks():
             {"id": 2, "name": "练习 pytest", "status": "未完成"},
         ]
     )
-
+    save_tasks()
 
 def test_health_check():
     response = client.get("/health")
