@@ -28,6 +28,12 @@ class TaskUpdate(BaseModel):
         return validate_task_name(value)
 
 
+class Task(BaseModel):
+    id: int
+    name: str
+    status: str
+
+
 app = FastAPI()
 
 
@@ -42,12 +48,12 @@ def health_check():
     return {"status": "ok"}
 
 
-@app.get("/tasks")
+@app.get("/tasks", response_model=list[Task])
 def list_tasks():
     return tasks
 
 
-@app.get("/tasks/{task_id}")
+@app.get("/tasks/{task_id}", response_model=Task)
 def get_task(task_id: int):
     for task in tasks:
         if task["id"] == task_id:
@@ -55,7 +61,7 @@ def get_task(task_id: int):
     raise HTTPException(status_code=404, detail="Task not found")
 
 
-@app.put("/tasks/{task_id}")
+@app.put("/tasks/{task_id}", response_model=Task)
 def update_task(task_id: int,task_update: TaskUpdate):
     for task in tasks:
         if task["id"] == task_id:
@@ -74,7 +80,7 @@ def delete_task(task_id: int):
     raise HTTPException(status_code=404, detail="Task not found")
 
 
-@app.post("/tasks", status_code=201)
+@app.post("/tasks", response_model= Task ,status_code=201)
 def create_task(task: TaskCreate):
     new_task = {
         "id": len(tasks) + 1,
